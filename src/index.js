@@ -16,5 +16,5 @@ databaseConnect().then(() => {
 }).catch((error) => {
     console.error('Failed to connect to MongoDB', error);
     process.exit(1); // Stop the server if the database fails to connect
-})
+});
 
