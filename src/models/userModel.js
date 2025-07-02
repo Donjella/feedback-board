@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema(
     {
@@ -41,7 +42,7 @@ const userSchema = new mongoose.Schema(
     },
 );
 
-// Hash password before saving
+// Hash password before saving using pre('save') middleware
 userSchema.pre('save', async function (next) {
     // Only hash if password is modified (or new)
     if (!this.isModified('password')) {
@@ -52,6 +53,25 @@ userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
     next();
 })
+
+userSchema.methods.generateToken = function () {
+    if(!process.env.JWT_SECRET){
+        throw new Error('JWT Token is not defined!');
+    }
+
+    return jwt.sign(
+        {
+            id: this._id,
+            first_name: this.first_name,
+            last_name: this.last_name,
+            email: this.email,
+            role: this.role,   
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE || '30d' }
+    );
+
+};
 
 const userModel = mongoose.model('User', userSchema);
 module.exports = userModel;
