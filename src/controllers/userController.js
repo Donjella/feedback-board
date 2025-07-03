@@ -3,13 +3,15 @@ const User = require('../models/userModel');
 // @desc Register (Create) a new user
 
 const registerUser = async (req, res) => {
+
+    const role = 'Community Member';
+
     try {
         const {
             first_name, 
             last_name, 
             password, 
             email, 
-            role,
         }
        = req.body;
 
@@ -26,11 +28,18 @@ const registerUser = async (req, res) => {
             role,
         });
 
+        // Generate JWT token from the user instance
+        const token = user.generateToken();
+
         res.status(201).json({
-            first_name: user.first_name, 
-            last_name: user.last_name, 
-            email: user.email, 
-            role: user.role,
+            message: 'User registered successfully',
+            user: {
+                first_name: user.first_name, 
+                last_name: user.last_name, 
+                email: user.email, 
+                role: user.role,
+            },
+            token,
         });
 
     } catch (error) {
