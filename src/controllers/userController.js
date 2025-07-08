@@ -41,6 +41,13 @@ const registerUser = async (req, res, next) => {
           if(userExists){
             throw new conflictError('User with this email already exists.')
           }
+        
+        // Password Validation
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+        throw new ValidationError('Password must be at least 8 characters and contain both letters and numbers.');
+        }
 
        const user = await User.create({
             first_name, 
