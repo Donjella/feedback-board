@@ -1,4 +1,4 @@
-const AppError = require('./appError');
+import AppError from './appError.js';
 
 // extends means inherit from AppError
 class ConflictError extends AppError {
@@ -7,4 +7,4 @@ class ConflictError extends AppError {
   }
 }
 
-module.exports = ConflictError;
+export default ConflictError;

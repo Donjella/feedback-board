@@ -1,10 +1,10 @@
-const ConflictError = require('./conflictError');
-const ForbiddenError = require('./forbiddenError');
-const NotFoundError = require('./notFoundError');
-const UnauthorizedError = require('./unauthorizedError');
-const ValidationError = require('./validationError');
+import ConflictError from './conflictError.js';
+import ForbiddenError from './forbiddenError.js';
+import NotFoundError from './notFoundError.js';
+import UnauthorizedError from './unauthorizedError.js';
+import ValidationError from './validationError.js';
 
-module.exports = {
+export {
   ConflictError,
   ForbiddenError,
   NotFoundError,

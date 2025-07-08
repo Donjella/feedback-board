@@ -1,9 +1,10 @@
-const AppError = require('./appError');
+import AppError from './appError.js';
 
+// extends means inherit from AppError
 class ForbiddenError extends AppError {
   constructor(message = 'Access forbidden') {
     super(message, 403);
   }
 }
 
-module.exports = ForbiddenError;
+export default ForbiddenError;

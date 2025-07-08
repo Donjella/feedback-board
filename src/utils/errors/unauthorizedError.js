@@ -1,4 +1,4 @@
-const AppError = require('./appError');
+import AppError from './appError.js';
 
 class UnauthorizedError extends AppError {
   constructor(message = 'Not authorized') {
@@ -6,4 +6,4 @@ class UnauthorizedError extends AppError {
   }
 }
 
-module.exports = UnauthorizedError;
+export default UnauthorizedError;

@@ -1,4 +1,4 @@
-const AppError = require('./appError');
+import AppError from './appError.js';
 
 class ValidationError extends AppError {
   constructor(message = 'Invalid input') {
@@ -6,4 +6,4 @@ class ValidationError extends AppError {
   }
 }
 
-module.exports = ValidationError;
+export default ValidationError;

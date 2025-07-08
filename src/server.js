@@ -1,8 +1,10 @@
-const express = require('express');
+// server.js
+
+import express from 'express';
 const app = express();
 
 // Import routes
-const userRoutes = require('./routes/userRoutes');
+import userRoutes from './routes/userRoutes.js';
 
 // Middleware to parse JSON request bodies
 // Must be added BEFORE mounting API routes
@@ -19,4 +21,4 @@ app.get('/', (req, res) => {
   });
 });
 
-module.exports = { app };
+export { app };

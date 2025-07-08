@@ -1,6 +1,8 @@
-const { app } = require('./server.js');
-const dotenv = require('dotenv');
-const { databaseConnect } = require('./database.js');
+// index.js
+
+import { app } from './server.js';
+import dotenv from 'dotenv';
+import { databaseConnect } from './database.js';
 
 // Load environment variables
 dotenv.config();

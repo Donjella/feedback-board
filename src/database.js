@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 async function databaseConnect(targetDatabaseURL = null) {
   console.log('Starting database connection');
@@ -30,4 +30,4 @@ async function databaseDisconnect() {
   }
 }
 
-module.exports = { databaseConnect, databaseDisconnect };
+export { databaseConnect, databaseDisconnect };
