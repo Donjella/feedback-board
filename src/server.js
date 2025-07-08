@@ -14,9 +14,9 @@ app.use('/users', userRoutes);
 
 // Base route
 app.get('/', (req, res) => {
-    res.json({
-        message: 'Hello, welcome to feedback station!'
-    });
+  res.json({
+    message: 'Hello, welcome to feedback station!',
+  });
 });
 
 module.exports = { app };

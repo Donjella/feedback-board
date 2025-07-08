@@ -5,10 +5,9 @@ const UnauthorizedError = require('./unauthorizedError');
 const ValidationError = require('./validationError');
 
 module.exports = {
-    ConflictError,
-    ForbiddenError,
-    NotFoundError,
-    UnauthorizedError,
-    ValidationError,
+  ConflictError,
+  ForbiddenError,
+  NotFoundError,
+  UnauthorizedError,
+  ValidationError,
 };
-
