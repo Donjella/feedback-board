@@ -1,8 +1,16 @@
 const User = require('../models/userModel');
 
+const {
+    conflictError,
+    forbiddenError,
+    notFoundError,
+    unauthorizedError, 
+    validationError,
+} = require('../utils/errors')
+
 // @desc Register (Create) a new user
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
 
     const role = 'Community Member';
 
@@ -15,10 +23,24 @@ const registerUser = async (req, res) => {
         }
        = req.body;
 
-       const userExists = await User.findOne( {email} );
-       if(userExists){
-        return res.status(400).json( {error: 'Email already in use' } );
+       const missingFields = [];
+       if (!first_name) missingFields.push('first_name');
+       if (!last_name) missingFields.push('last_name');
+       if (!password) missingFields.push('password');
+       if (!email) missingFields.push('email');
+
+       if(missingFields.length > 0){
+        throw new validationError(`Missing required fields: ${missingFields.join(', ')}`);
        }
+
+       const userExists = await User.findOne( {email} );
+    //    if(userExists){
+    //     return res.status(400).json( {error: 'Email already in use' } );
+    //    }
+        
+          if(userExists){
+            throw new conflictError('User with this email already exists.')
+          }
 
        const user = await User.create({
             first_name, 
@@ -43,7 +65,8 @@ const registerUser = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(400).json({ error: error.message});
+        // res.status(400).json({ error: error.message});
+        next(error);
     }
 }
 
