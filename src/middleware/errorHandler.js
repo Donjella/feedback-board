@@ -1,6 +1,6 @@
 const AppError = require('../utils/errors/appError');
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, _next) => {
   // Default Values
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
@@ -56,3 +56,5 @@ const errorHandler = (err, req, res, next) => {
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
   });
 };
+
+module.exports = errorHandler;

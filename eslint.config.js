@@ -1,20 +1,17 @@
 // eslint.config.js
-import js from '@eslint/js';
-import prettier from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
-import globals from 'globals';
+const js = require('@eslint/js');
+const prettier = require('eslint-plugin-prettier');
+const prettierConfig = require('eslint-config-prettier');
+const globals = require('globals');
 
-export default [
-  {
-    ignores: ['eslint.config.js', 'node_modules', 'dist'],
-  },
+module.exports = [
   js.configs.recommended,
   prettierConfig,
   {
     languageOptions: {
-        globals: globals.node,
-        ecmaVersion: 2021,
-        sourceType: 'commonjs',
+      globals: globals.node,
+      ecmaVersion: 2021,
+      sourceType: 'commonjs',
     },
     plugins: {
       prettier,
