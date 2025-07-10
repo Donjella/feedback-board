@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, getUserProfile, getAllUsers  } from '../controllers/userController.js';
+import { registerUser, loginUser, getUserProfile } from '../controllers/userController.js';
 import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -11,7 +11,5 @@ router.post('/login', loginUser);
 // Protected Routes (Only logged-in users)
 router.get('/profile', protect, getUserProfile);
 
-// Admin-only Routes
-router.get('/', protect, adminOnly, getAllUsers);
 
 export default router;

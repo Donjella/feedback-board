@@ -6,6 +6,7 @@ const app = express();
 
 // Import routes
 import userRoutes from './routes/userRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 // Middleware to parse JSON request bodies
 // Must be added BEFORE mounting API routes
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Mount API routes
 app.use('/users', userRoutes);
+app.use('/admin', adminRoutes);
 
 // Base route
 app.get('/', (req, res) => {
