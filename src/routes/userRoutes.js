@@ -12,6 +12,6 @@ router.post('/login', loginUser);
 router.get('/profile', protect, getUserProfile);
 
 // Admin-only Routes
-router.get('/users', protect, adminOnly, getAllUsers);
+router.get('/', protect, adminOnly, getAllUsers);
 
 export default router;

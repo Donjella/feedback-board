@@ -27,7 +27,9 @@ const protect = asyncHandler(async (req, res, next) => {
 
 // middleware to check Admin role
 const adminOnly = asyncHandler(async (req, res, next) => {
-    if (!req.user || req.user.role !=='admin') {
+    const role = req.user?.role?.toLowerCase();
+
+    if (role !=='admin') {
     throw new UnauthorizedError('Not authorized. Only Admin access.')
     }
     next();
