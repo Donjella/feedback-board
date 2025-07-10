@@ -5,6 +5,7 @@ import {
   ConflictError,
   ValidationError,
   UnauthorizedError,
+  NotFoundError,
 } from '../utils/errors/index.js';
 
 // @desc Register (Create) a new user
@@ -68,10 +69,13 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password){
+    throw new ValidationError('Email and password are required.')
+  }
   const user = await User.findOne({ email }).select('+password');
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new UnauthorizedError('Incorrect login credentials provided');
+    throw new UnauthorizedError('Incorrect login credentials provided.');
   }
 
   // Generate JWT token
@@ -89,4 +93,40 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 });
 
-export { registerUser, loginUser };
+/* 
+=============================================
+User Routes (Protected routes)
+=============================================
+*/
+
+// @desc Get user profile
+// @route /users/profile
+// @access Private, logged-in users only
+
+const getUserProfile = asyncHandler(async (req, res) => {
+
+  const user = await User.findById(req.user._id).select('-password');
+  if (!user){
+    throw new NotFoundError('Unable to retrieve user profile. User not found');
+  }
+  res.status(200).json(user);
+});
+
+/* 
+=============================================
+Admin-only Routes 
+=============================================
+*/
+
+// @desc Get all users
+// @routes /admin/users
+// @access Admin, admins only
+
+const getAllUsers = asyncHandler(async (req, res,) => {
+  const users = await User.find().select('-password');
+ 
+  res.status(200).json(users);
+});
+
+
+export { registerUser, loginUser, getUserProfile, getAllUsers };
