@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/userModel';
+import User from '../models/userModel.js';
 import asyncHandler from 'express-async-handler';
-import { NotFoundError, UnauthorizedError } from '../utils/errors';
+import { NotFoundError, UnauthorizedError } from '../utils/errors/index.js';
 
 // Middleware to protect routes (Users must be logged in)
 const protect = asyncHandler(async (req, res, next) => {
@@ -34,5 +34,5 @@ const adminOnly = asyncHandler(async (req, res, next) => {
 });
 
 
-
+export { protect, adminOnly };
 

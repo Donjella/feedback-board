@@ -1,6 +1,7 @@
 // server.js
 
 import express from 'express';
+import errorHandler from './middleware/errorHandler.js'
 const app = express();
 
 // Import routes
@@ -20,5 +21,17 @@ app.get('/', (req, res) => {
     message: 'Hello, welcome to feedback station!',
   });
 });
+
+// 404 Handler for non-existent routes i.e.  Catch-all handler for routes not defined (404)
+app.use((req, res) => {
+  res.status(404).json(
+    {
+      success: false,
+      message: `Route ${req.originalUrl} not found`,
+    }
+  )
+});
+
+app.use(errorHandler);
 
 export { app };
