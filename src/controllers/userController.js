@@ -112,6 +112,26 @@ const getUserProfile = asyncHandler(async (req, res) => {
   res.status(200).json(user);
 });
 
+// @desc Delete own user profile
+// @route /users/delete
+// @access Private, logged-in users only
+
+const deleteOwnAccount = asyncHandler(async (req, res) => {
+
+  const user = await User.findByIdAndDelete(req.user._id);
+
+  if (!user){
+    throw new NotFoundError('User not found');
+  }
+
+  res.status(200).json({
+    message: 'You have successfully deleted your account',
+    deletedUserId: req.user._id,
+  });
+});
+
+
+
 /* 
 =============================================
 Admin-only Routes 
@@ -129,4 +149,4 @@ const getAllUsers = asyncHandler(async (req, res,) => {
 });
 
 
-export { registerUser, loginUser, getUserProfile, getAllUsers };
+export { registerUser, loginUser, getUserProfile, deleteOwnAccount, getAllUsers };
