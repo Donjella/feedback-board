@@ -6,6 +6,7 @@ import {
   ValidationError,
   UnauthorizedError,
   NotFoundError,
+  ForbiddenError,
 } from '../utils/errors/index.js';
 
 // @desc Register (Create) a new user
@@ -69,8 +70,8 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password){
-    throw new ValidationError('Email and password are required.')
+  if (!email || !password) {
+    throw new ValidationError('Email and password are required.');
   }
   const user = await User.findOne({ email }).select('+password');
 
@@ -104,10 +105,9 @@ User Routes (Protected routes)
 // @access Private, logged-in users only
 
 const getUserProfile = asyncHandler(async (req, res) => {
-
   const user = await User.findById(req.user._id).select('-password');
-  if (!user){
-    throw new NotFoundError('Unable to retrieve user profile. User not found');
+  if (!user) {
+    throw new NotFoundError('Unable to retrieve user profile. User not found.');
   }
   res.status(200).json(user);
 });
@@ -117,10 +117,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @access Private, logged-in users only
 
 const deleteOwnAccount = asyncHandler(async (req, res) => {
-
   const user = await User.findByIdAndDelete(req.user._id);
 
-  if (!user){
+  if (!user) {
     throw new NotFoundError('User not found');
   }
 
@@ -129,8 +128,6 @@ const deleteOwnAccount = asyncHandler(async (req, res) => {
     deletedUserId: req.user._id,
   });
 });
-
-
 
 /* 
 =============================================
@@ -142,11 +139,30 @@ Admin-only Routes
 // @routes /admin/users
 // @access Admin, admins only
 
-const getAllUsers = asyncHandler(async (req, res,) => {
+const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find().select('-password');
- 
+
   res.status(200).json(users);
 });
 
+// @desc Delete user by ID
+// @routes /admin/users/:id
+// @access Admin, admins only
 
-export { registerUser, loginUser, getUserProfile, deleteOwnAccount, getAllUsers };
+const AdminDeleteUser = asyncHandler(async (req, res) => {
+  if (req.user.role !== 'Admin') {
+    throw new ForbiddenError('Unauthorized. Only administrators allowed.');
+  }
+
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) {
+    throw new NotFoundError('User not found.');
+  }
+
+  res.status(200).json({
+    message: 'User successfully deleted',
+    deletedUserId: user._id,
+  });
+});
+
+export { registerUser, loginUser, getUserProfile, deleteOwnAccount, getAllUsers, AdminDeleteUser };

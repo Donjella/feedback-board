@@ -4,10 +4,4 @@ import NotFoundError from './notFoundError.js';
 import UnauthorizedError from './unauthorizedError.js';
 import ValidationError from './validationError.js';
 
-export {
-  ConflictError,
-  ForbiddenError,
-  NotFoundError,
-  UnauthorizedError,
-  ValidationError,
-};
+export { ConflictError, ForbiddenError, NotFoundError, UnauthorizedError, ValidationError };
