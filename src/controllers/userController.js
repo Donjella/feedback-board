@@ -104,7 +104,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete own user profile
-// @route DELETE /users/delete
+// @route DELETE /users/me
 // @access Protected, logged-in users only
 
 const deleteOwnAccount = asyncHandler(async (req, res) => {

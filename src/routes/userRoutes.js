@@ -4,6 +4,7 @@ import {
   loginUser,
   deleteOwnAccount,
   getUserProfile,
+  updateOwnAccount
 } from '../controllers/userController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -16,5 +17,6 @@ router.post('/login', loginUser);
 // Protected Routes (Only logged-in users)
 router.get('/profile', protect, getUserProfile);
 router.delete('/me', protect, deleteOwnAccount);
+router.patch('/update', protect, updateOwnAccount);
 
 export default router;
