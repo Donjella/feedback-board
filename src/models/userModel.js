@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       select: false,
+      validate: {
+        validator: function(password){
+          return /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/.test(password);
+        },
+        message: 'Password must be at least 8 characters and contain both letters and numbers.'
+      }
     },
     email: {
       type: String,

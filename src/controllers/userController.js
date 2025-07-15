@@ -32,15 +32,6 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ConflictError('User with this email already exists.');
   }
 
-  // Password Validation
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/;
-
-  if (!passwordRegex.test(password)) {
-    throw new ValidationError(
-      'Password must be at least 8 characters and contain both letters and numbers.'
-    );
-  }
-
   const user = await User.create({
     first_name,
     last_name,
@@ -113,19 +104,62 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete own user profile
-// @route /users/delete
-// @access Private, logged-in users only
+// @route DELETE /users/delete
+// @access Protected, logged-in users only
 
 const deleteOwnAccount = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndDelete(req.user._id);
 
   if (!user) {
-    throw new NotFoundError('User not found');
+    throw new NotFoundError('User not found.');
   }
 
   res.status(200).json({
     message: 'You have successfully deleted your account',
     deletedUserId: req.user._id,
+  });
+});
+
+// @desc Update own user profile
+// @route PATCH /users/update
+// @access Protected, logged-in users only
+
+const updateOwnAccount = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if(!user){
+    throw new NotFoundError('User not found.')
+  }
+
+  
+  if (req.body.first_name !== undefined) {user.first_name = req.body.first_name}
+  if (req.body.last_name !== undefined) {user.last_name = req.body.last_name}
+
+  if (req.body.email && req.body.email !== user.email) {
+    const existingUser = await User.findOne({ email: req.body.email });
+    if(existingUser){
+      throw new ConflictError('Email already exists.');
+    } else {
+      user.email = req.body.email;
+    }
+  }
+
+  if (req.body.password !== undefined) {
+    user.password = req.body.password;
+  };
+
+  await user.save();
+
+  const token = user.generateToken();
+
+  res.status(200).json({
+    message: 'Account details updated successfully',
+    user: {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+    },
+    token,
   });
 });
 
@@ -165,4 +199,4 @@ const AdminDeleteUser = asyncHandler(async (req, res) => {
   });
 });
 
-export { registerUser, loginUser, getUserProfile, deleteOwnAccount, getAllUsers, AdminDeleteUser };
+export { registerUser, loginUser, getUserProfile, deleteOwnAccount, getAllUsers, AdminDeleteUser, updateOwnAccount };
