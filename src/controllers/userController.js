@@ -9,6 +9,13 @@ import {
   ForbiddenError,
 } from '../utils/errors/index.js';
 
+
+/* 
+=============================================
+Public routes
+=============================================
+*/
+
 // @desc Register (Create) a new user
 // @route
 // @access Public
@@ -85,6 +92,7 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 });
 
+
 /* 
 =============================================
 User Routes (Protected routes)
@@ -92,7 +100,7 @@ User Routes (Protected routes)
 */
 
 // @desc Get user profile
-// @route /users/profile
+// @route GET /users/profile
 // @access Private, logged-in users only
 
 const getUserProfile = asyncHandler(async (req, res) => {
